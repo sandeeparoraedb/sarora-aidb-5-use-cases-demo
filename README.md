@@ -33,7 +33,7 @@ generates").
   re-creation of any real customer incident. The before/after benefit
   numbers are real (a second live `EXPLAIN ANALYZE` after the index is
   created), not estimates.
-- Demo 4 (Text-to-Insights) is the closest to the seed deck.s actual UC1 request,
+- Demo 4 (Text-to-Insights) is the closest to the seed deck's actual UC1 request,
   but its SQL-safety guardrail is intentionally simple for a demo -- see
   that folder's README for the honest caveat about what production needs
   beyond this.
@@ -41,6 +41,19 @@ generates").
   invoice, and telemetry reading is synthetic, constructed to match the
   *narrative* in the two decks in this folder, not any real terminal's
   operational history.
+- `pgfs` is installed (see `sql/01-init.sql`) but unused by any of these five
+  capabilities -- nothing here reads from or writes to a real object store
+  (S3, GCS, Azure Blob, etc.); all data lives in Postgres tables.
+- Text generation and embeddings both run on a hosted model via OpenRouter
+  (`gpt-4o-mini` / `text-embedding-3-small`, see `sql/02-aidb-models.sql`),
+  not a locally-hosted model -- see that file for the fully-local alternative
+  and why it is not the default.
+- The workflow steps in each capability (scan -> diagnose -> human-approve/
+  reject, triage, MCP tool calls, etc.) are built specifically for this demo
+  narrative, not a shipped product workflow -- a real deployment would need
+  custom coding around approval routing, audit retention, error handling,
+  and integration with whatever ticketing/ERP system already owns that
+  process today.
 
 ## Fast path: one script
 
