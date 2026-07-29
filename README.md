@@ -6,6 +6,23 @@ the "AI Use Cases" seed deck (July 2026) and demonstrates the five
 capabilities from the EDB Agent Factory sales training deck -- each mapped
 to a concrete terminal business problem, not a generic one.
 
+## Industry: shipping & terminal operations
+
+This demo is built for shipping lines and container-terminal operators --
+the companies that run the ports, cranes, gate systems, and vessel
+schedules behind global container trade. Terminal operations sit on a mix
+of decades-old TOS/ERP systems and free-text maintenance and billing
+records, so the same handful of questions come up across the industry:
+has this crane failure signature been seen before, why did a berth or gate
+metric spike and what did it cost, is a disputed invoice actually wrong,
+and can other AI tools query this data safely without a new integration
+per tool. The five capabilities here map each of those recurring
+operational moments -- maintenance history search, database performance,
+billing dispute triage, cross-system operational Q&A, and governed AI
+access -- onto one EDB Postgres AI instance, using a synthetic but
+realistic terminal incident week as the running example.
+
+
 | # | Capability (AI Factory deck) | Business problem | Persona | Folder |
 |---|---|---|---|---|
 | 1 | Enterprise Search (AIDB + AI Pipelines + pgvector) | Maintenance work-order history is free text, scattered per terminal -- a repeat crane failure signature goes unrecognized until it's too late | Priya, maintenance planner | `demos/01-enterprise-search/` |
