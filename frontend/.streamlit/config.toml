@@ -1,0 +1,15 @@
+# Customer-facing demo: hide Streamlit's own "Deploy" button and trim the
+# built-in hamburger menu (Streamlit Cloud deploy prompt, "Report a bug",
+# "About", etc.) -- none of that is relevant when presenting this app live
+# to a customer against a local database.
+[client]
+toolbarMode = "minimal"
+
+[theme]
+base = "dark"
+# "Slate and teal" palette (chosen 2026-07-27) -- calm, professional; teal is
+# the one accent color, used for primary buttons/active nav/links only.
+primaryColor = "#14b8a6"
+backgroundColor = "#0f172a"
+secondaryBackgroundColor = "#1e293b"
+textColor = "#e2e8f0"

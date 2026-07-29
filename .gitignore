@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
+.env
+edb_token.txt
+frontend/streamlit.log
+frontend/.streamlit.pid

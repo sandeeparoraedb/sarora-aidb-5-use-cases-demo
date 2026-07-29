@@ -1,0 +1,66 @@
+# Named distinctly from the other local track's compose
+# file so this is a genuinely independent stack -- without an explicit
+# top-level `name:`, Compose derives the project name from the containing
+# folder, and both tracks' folders are named "search-demo-code", so they'd
+# silently share the same project namespace (and therefore the same
+# `edb-data` volume/database) despite living in different folders.
+name: edb-northstar-ai-demo
+
+services:
+  epas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      secrets:
+        - edb_token
+    image: edb-northstar-ai-demo-epas:18
+    container_name: edb-postgres-ops-copilot
+    platform: linux/amd64
+    shm_size: '2gb'
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      # my_summarizer (text generation) runs on OpenRouter by default -- see
+      # sql/02-aidb-models.sql. Get a key at https://openrouter.ai/keys.
+      # bring-up.sh populates this from ~/.openrouter_key automatically.
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      # Optional -- only needed if you switch sql/02-aidb-models.sql to the
+      # OpenAI-backed alternative instead.
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes:
+      - edb-data:/home/enterprisedb/data
+      - ./scripts:/opt/scripts:ro
+      - ./docs:/docs:ro
+      - ./demos:/opt/demos:ro
+    restart: unless-stopped
+
+  # Additive only -- new service for the "MCP Gateway" demo step. Does not
+  # touch or depend on any change to `epas` above; `docker compose up -d
+  # airman-mcp` starts only this container and leaves epas alone. Governed,
+  # restricted (read-only) access mode; purpose + session tracing on so every
+  # AI-originated query is attributable in pg_stat_activity.
+  airman-mcp:
+    image: enterprisedb/pg-airman-mcp
+    container_name: edb-airman-mcp-ops-copilot
+    depends_on:
+      - epas
+    ports:
+      - "8011:8001"
+    environment:
+      AIRMAN_MCP_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@epas:5432/mydb
+      AIRMAN_MCP_ACCESS_MODE: restricted
+      AIRMAN_MCP_TRANSPORT: streamable-http
+      AIRMAN_MCP_STREAMABLE_HTTP_HOST: 0.0.0.0
+      AIRMAN_MCP_STREAMABLE_HTTP_PORT: "8001"
+      AIRMAN_MCP_PURPOSE: fleet-ops-copilot
+      AIRMAN_MCP_TRACING: "true"
+    restart: unless-stopped
+
+secrets:
+  edb_token:
+    file: ./edb_token.txt
+
+volumes:
+  edb-data:
