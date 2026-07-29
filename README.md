@@ -8,10 +8,10 @@ to a concrete terminal business problem, not a generic one.
 
 | # | Capability (AI Factory deck) | Business problem | Persona | Folder |
 |---|---|---|---|---|
-| 1 | Enterprise Search (AIDB + AI Pipelines + pgvector) | Maintenance work-order history is free text, scattered per terminal -- a repeat crane failure signature goes unrecognized until it's too late | Priya, maintenance planner (UC2) | `demos/01-enterprise-search/` |
+| 1 | Enterprise Search (AIDB + AI Pipelines + pgvector) | Maintenance work-order history is free text, scattered per terminal -- a repeat crane failure signature goes unrecognized until it's too late | Priya, maintenance planner | `demos/01-enterprise-search/` |
 | 2 | Ops Copilot (AI Sidecar + AIDB) | Nobody proactively watches for the queries about to become a performance ticket; DBAs spend half their time firefighting after the fact | DBA / platform team | `demos/02-ops-copilot/` |
 | 3 | App Intelligence (AIDB, in-DB inference) | Disputed invoices are triaged by hand; PII sits in both structured columns and free-text complaints | Billing / finance analyst | `demos/03-app-intelligence/` |
-| 4 | Text-to-Insights (Semantic KB + pgvector + AIDB) | A cross-module operational question takes three hours and four systems to answer | Ana, terminal ops manager (UC1) | `demos/04-text-to-insights/` |
+| 4 | Text-to-Insights (Semantic KB + pgvector + AIDB) | A cross-module operational question takes three hours and four systems to answer | Ana, terminal ops manager | `demos/04-text-to-insights/` |
 | 5 | MCP Gateway (`pg-airman-mcp`, Streamable HTTP) | General-purpose AI tools (Claude, Cursor, internal agents) need safe, governed access to this same database without a custom integration per tool or a shared raw credential | Security / platform lead | Streamlit "MCP Gateway" step + `airman-mcp` service in `docker-compose.yml` |
 
 All five run against the same seeded dataset (MCP Gateway queries the same live Postgres instance through pg-airman-mcp, in restricted/read-only mode), and several answers
@@ -33,7 +33,7 @@ generates").
   re-creation of any real customer incident. The before/after benefit
   numbers are real (a second live `EXPLAIN ANALYZE` after the index is
   created), not estimates.
-- Demo 4 (Text-to-Insights) is the closest to the seed deck's actual UC1 request,
+- Demo 4 (Text-to-Insights) is the closest to the seed deck's actual request,
   but its SQL-safety guardrail is intentionally simple for a demo -- see
   that folder's README for the honest caveat about what production needs
   beyond this.
